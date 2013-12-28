@@ -1,7 +1,7 @@
 class Tile(object):
         def __init__(self):
                 self.up = False
-                self.contents = '0'
+                self.contents = ' '
                 self.string = '         '
                 # self.string[i] notes
                 # 0 = note: 0
@@ -66,18 +66,23 @@ class Tile(object):
                         self.string = '*********'
                         self._setstring(4,self.contents)
                         self.up = True
+                        return self.contents
 
 class Board(object):
         def __init__(self):
                 self.T = [Tile() for n in xrange(25)]
+                self.score = 1
         def __str__(self):
                 border = '+ --- + --- + --- + --- + --- +'
                 mini_border = '+ --- +'
-                output = ''
 
                 #
                 ##
                 ### Crafts the board
+
+                # The Scoreboard
+                output = 'Score: ' + str(self.score) + '\n'
+                
                 # For each row of tiles
                 for Z in xrange(5):
                         output += border + ' ' + mini_border + '\n'
@@ -103,10 +108,33 @@ class Board(object):
                 for thingy in xrange(3):
                         output += ('| ~~~ ' * 5) + '|\n'
                 output += border
+
+                #
                 return output
 
         def reset(self):
+                self.score = 1
                 for tile in self.T:
                         tile.flip(False)
+        def start_game(self):
+                self.reset()
+                
+                from random import randint
+                for tile in self.T:
+                        tile.contents = str(randint(0,3))
+                print self
+
+##        def reveal(self,tileno):
+##                if self.T[tileno].up
+##                multiplier = self.T[tileno].flip()
+##                if multiplier not in ['0','1','2','3']:
+##                        print "Err...",multiplier
+##                        print str(multiplier)
+##                        raise TypeError("Whoa man, this tile ain't right..")
+##                self.score *= int(multiplier)
+##                if self.score == 0:
+##                        print "GAME OVER!"
+                
 
 B = Board()
+B.start_game()
