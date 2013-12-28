@@ -88,20 +88,5 @@ class Board(object):
                         output += ('| ~~~ ' * 5) + '|\n'
                 output += border
                 return output
-                
-        def should_look_like(self):
-                output = '+' + (' --- +' * 5) + ' + --- +'
-                for row in xrange(5):
-                        output += '\n|'         + ('     |' * 5)
-                        output += ' |     |\n|'   + ('     |' * 5)
-                        output += ' |     |\n|'   + ('     |' * 5)
-                        output += ' |     |\n+'   + (' --- +' * 5)
-                        output += ' + --- +'
-                output += '\n'          + ('+ --- ' * 5)
-                output += '+\n|'        + ('     |' * 5)
-                output += '\n|'         + ('     |' * 5)
-                output += '\n|'         + ('     |' * 5)
-                output += '\n+'         + (' --- +' * 5)
-                return output
 
 B = Board()
