@@ -1,6 +1,6 @@
 class Tile(object):
         def __init__(self):
-                self.up = False
+                self.up = None
                 # 0 = note: 0
                 # 1 = decorative if flipped
                 # 2 = note: 1
@@ -50,10 +50,15 @@ class Tile(object):
                 else:
                         raise TypeError("Tile object's note() requires 0,1,2,3 as input")
 
+        def flip(self,ready=True):
+                if not ready:
+                        self.__init__()
+                else:
+                        pass
+
 class Board(object):
         def __init__(self):
                 self.T = [Tile() for n in xrange(25)]
-        
         def __str__(self):
                 border = '+ --- + --- + --- + --- + --- +'
                 mini_border = '+ --- +'
@@ -88,5 +93,9 @@ class Board(object):
                         output += ('| ~~~ ' * 5) + '|\n'
                 output += border
                 return output
+
+        def reset(self):
+                for tile in self.T:
+                        tile.flip(False)
 
 B = Board()
