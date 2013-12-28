@@ -1,6 +1,9 @@
 class Tile(object):
         def __init__(self):
-                self.up = None
+                self.up = False
+                self.contents = '0'
+                self.string = '         '
+                # self.string[i] notes
                 # 0 = note: 0
                 # 1 = decorative if flipped
                 # 2 = note: 1
@@ -10,7 +13,6 @@ class Tile(object):
                 # 6 = note: 2
                 # 7 = decorative if flipped
                 # 8 = note: 3
-                self.string = '         '
         def __str__(self):
                 return self.string
 
@@ -27,7 +29,9 @@ class Tile(object):
         
         def note(self,n):
                 """T.note([0,1,2 or 3]) -> Writes a note for the argument on the tile."""
-                if   n == 0:
+                if self.up:
+                        pass
+                elif n == 0:
                         if self.string[0] == '0':
                                 self._setstring(0,' ')
                         else:
@@ -53,8 +57,15 @@ class Tile(object):
         def flip(self,ready=True):
                 if not ready:
                         self.__init__()
-                else:
+                elif self.up == None:
                         pass
+                elif self.up:
+                        self.string = '         '
+                        self.up = False
+                else:
+                        self.string = '*********'
+                        self._setstring(4,self.contents)
+                        self.up = True
 
 class Board(object):
         def __init__(self):
@@ -75,7 +86,7 @@ class Board(object):
                         for i in [0,3,6]:
                                 
                                 # For each tile
-                                for t in xrange(Z,Z+5):
+                                for t in xrange((Z*5),(Z*5)+5):
                                         output += '| ' + str(self.T[t])[i:i+3] + ' '
 
                                 # /end tile
