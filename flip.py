@@ -66,11 +66,26 @@ class Tile(object):
                         self.string = '*********'
                         self._setstring(4,self.contents)
                         self.up = True
-
+class Data(object):
+        def __init__(self):
+                self.row = [[0,0] for i in xrange(5)]
+                self.col = [[0,0] for i in xrange(5)]
+        def reset(self):
+                self.__init__()
+        def collect_data(self,tiles):
+                self.__init__()
+                for t in xrange(len(tiles)):
+                        self.row[t/5][1] += int(tiles[t].contents)
+                        self.col[t%5][1] += int(tiles[t].contents)
+                        if tiles[t].contents == '0':
+                                self.row[t/5][0] += 1
+                                self.col[t%5][0] += 1
+                
 class Board(object):
         def __init__(self):
                 self.T = [Tile() for n in xrange(25)]
                 self.score = 1
+                self.data = Data()
         def __str__(self):
                 border = '+ --- + --- + --- + --- + --- +'
                 mini_border = '+ --- +'
@@ -95,7 +110,9 @@ class Board(object):
 
                                 # /end tile
                                 # prints side data
-                                output += '| | ~~~ |\n'
+                                if   i == 0:      output += '| |S: **|\n'
+                                elif i == 3:      output += '| | ~~~ |\n'
+                                elif i == 6:      output += '| |0: **|\n'
 
                         # /end line
                         
@@ -104,15 +121,26 @@ class Board(object):
 
                 # prints bottom data
                 output += '\n' + border + '\n'
-                for thingy in xrange(3):
-                        output += ('| ~~~ ' * 5) + '|\n'
+                
+                # sums
+                for c in xrange(5):
+                        output += '|S: '
+                        if (self.data.col[c][1])/10 < 1: output += ' '
+                        output += str(self.data.col[c][1])
+                output += '|\n' + ('| ~~~ ' * 5) + '|\n'
+                
+                # zeroes
+                for c in xrange(5):
+                        output += '|0:  ' + str(self.data.col[c][0])
+                output += '|\n'
                 output += border
-
+                
                 #
                 return output
 
         def reset(self):
                 self.score = 1
+                self.data.reset()
                 for tile in self.T:
                         tile.flip(False)
         def start_game(self):
@@ -121,8 +149,6 @@ class Board(object):
                 from random import randint
                 for tile in self.T:
                         tile.contents = str(randint(0,3))
+
+                self.data.collect_data(self.T)
                 print self
-
-
-B = Board()
-B.start_game()
