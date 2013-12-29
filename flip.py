@@ -66,7 +66,6 @@ class Tile(object):
                         self.string = '*********'
                         self._setstring(4,self.contents)
                         self.up = True
-                        return self.contents
 
 class Board(object):
         def __init__(self):
@@ -124,17 +123,6 @@ class Board(object):
                         tile.contents = str(randint(0,3))
                 print self
 
-##        def reveal(self,tileno):
-##                if self.T[tileno].up
-##                multiplier = self.T[tileno].flip()
-##                if multiplier not in ['0','1','2','3']:
-##                        print "Err...",multiplier
-##                        print str(multiplier)
-##                        raise TypeError("Whoa man, this tile ain't right..")
-##                self.score *= int(multiplier)
-##                if self.score == 0:
-##                        print "GAME OVER!"
-                
 
 B = Board()
 B.start_game()
