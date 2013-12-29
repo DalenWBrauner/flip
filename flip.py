@@ -110,9 +110,14 @@ class Board(object):
 
                                 # /end tile
                                 # prints side data
-                                if   i == 0:      output += '| |S: **|\n'
+                                if   i == 0:
+                                        output += '| |S: '
+                                        if (self.data.row[Z][1])/10 < 1: output += ' '
+                                        output += str(self.data.row[Z][1]) + '|\n'
                                 elif i == 3:      output += '| | ~~~ |\n'
-                                elif i == 6:      output += '| |0: **|\n'
+                                elif i == 6:
+                                        output += '| |0:  '
+                                        output += str(self.data.row[Z][0]) + '|\n'
 
                         # /end line
                         
