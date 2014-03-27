@@ -1,9 +1,11 @@
+from random import randint
+
 class Tile(object):
         def __init__(self):
                 self.up = False
                 self.contents = ' '
-                self.string = '         '
-                # self.string[i] notes
+                self._string = '         '
+                # self._string[i] notes
                 # 0 = note: 0
                 # 1 = decorative if flipped
                 # 2 = note: 1
@@ -14,10 +16,10 @@ class Tile(object):
                 # 7 = decorative if flipped
                 # 8 = note: 3
         def __str__(self):
-                return self.string
+                return self._string
 
         def _setstring(self,I,V):
-                """T.setstring([index],[value]) -> Sets self.string's index to that value."""
+                """T._setstring([index],[value]) -> Sets self._string's index to that value."""
                 if   I not in range(9):
                         raise IndexError("Index must be [0:9]")
                 elif type(V) != str:
@@ -25,29 +27,29 @@ class Tile(object):
                 elif len(V) != 1:
                         raise TypeError("Value must be precisely one character")
                 else:
-                        self.string = self.string[:I] + str(V) + self.string[(I+1):]
+                        self._string = self._string[:I] + str(V) + self._string[(I+1):]
         
         def note(self,n):
-                """T.note([0,1,2 or 3]) -> Writes a note for the argument on the tile."""
+                """T.note([0,1,2,3]) -> Writes a note for the argument on the tile."""
                 if self.up:
                         pass
                 elif n == 0:
-                        if self.string[0] == '0':
+                        if self._string[0] == '0':
                                 self._setstring(0,' ')
                         else:
                                 self._setstring(0,'0')
                 elif n == 1:
-                        if self.string[2] == '1':
+                        if self._string[2] == '1':
                                 self._setstring(2,' ')
                         else:
                                 self._setstring(2,'1')
                 elif n == 2:
-                        if self.string[6] == '2':
+                        if self._string[6] == '2':
                                 self._setstring(6,' ')
                         else:
                                 self._setstring(6,'2')
                 elif n == 3:
-                        if self.string[8] == '3':
+                        if self._string[8] == '3':
                                 self._setstring(8,' ')
                         else:
                                 self._setstring(8,'3')
@@ -60,13 +62,16 @@ class Tile(object):
                 elif self.up == None:
                         pass
                 elif self.up:
-                        self.string = '         '
+                        self._string = '         '
                         self.up = False
                 else:
-                        self.string = '*********'
+                        self._string = '*********'
                         self._setstring(4,self.contents)
                         self.up = True
+                        return self.contents
 class Data(object):
+        """Collects the values in each row and col, along with
+        how many zeroes."""
         def __init__(self):
                 self.row = [[0,0] for i in xrange(5)]
                 self.col = [[0,0] for i in xrange(5)]
@@ -148,12 +153,10 @@ class Board(object):
                 self.data.reset()
                 for tile in self.T:
                         tile.flip(False)
+                        
         def start_game(self):
                 self.reset()
-                
-                from random import randint
                 for tile in self.T:
                         tile.contents = str(randint(0,3))
-
                 self.data.collect_data(self.T)
                 print self
