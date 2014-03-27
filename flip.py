@@ -19,42 +19,48 @@ class Tile(object):
                 return self._string
 
         def _setstring(self,I,V):
-                """T._setstring([index],[value]) -> Sets self._string's index to that value."""
+                """T._setstring([index],[value])
+                Sets self._string's index to that value."""
                 if   I not in range(9):
                         raise IndexError("Index must be [0:9]")
                 elif type(V) != str:
                         raise TypeError("Value must be in string format")
                 elif len(V) != 1:
-                        raise TypeError("Value must be precisely one character")
+                        raise TypeError("Value must be precisely one char")
                 else:
                         self._string = self._string[:I] + str(V) + self._string[(I+1):]
         
         def note(self,n):
-                """T.note([0,1,2,3]) -> Writes a note for the argument on the tile."""
+                """T.note([0,1,2,3])
+                Writes a note for the argument on the tile."""
                 if self.up:
                         pass
-                elif n == 0:
+                elif n == '0':
                         if self._string[0] == '0':
                                 self._setstring(0,' ')
                         else:
                                 self._setstring(0,'0')
-                elif n == 1:
+                elif n == '1':
                         if self._string[2] == '1':
                                 self._setstring(2,' ')
                         else:
                                 self._setstring(2,'1')
-                elif n == 2:
+                elif n == '2':
                         if self._string[6] == '2':
                                 self._setstring(6,' ')
                         else:
                                 self._setstring(6,'2')
-                elif n == 3:
+                elif n == '3':
                         if self._string[8] == '3':
                                 self._setstring(8,' ')
                         else:
                                 self._setstring(8,'3')
                 else:
-                        raise TypeError("Tile object's note() requires 0,1,2,3 as input")
+                        ERR = "Tile object's note() requires 0,1,2,3 as"+\
+                              "input"
+                        ERR += ", not " + str(n) + " of type " + \
+                               str(type(n))
+                        raise TypeError(ERR)
 
         def flip(self,ready=True):
                 if not ready:

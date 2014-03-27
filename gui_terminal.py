@@ -6,6 +6,8 @@ YESNO =     ['y','n','Y','N','YES','NO','Yes','No','yes','no']
 YES =       ['y','Y','YES','Yes','yes',]
 NO =        ['n','N','NO','No','no']
 ROWSCOLS =  ['1','2','3','4','5']
+NOTES =     ['0','1','2','3','DONE','Done','done']
+DONE =      ['DONE','Done','done']
 BGM =       'http://www.listenonrepeat.com/watch/?v=nPSDHk_lyrc'
         
 def ask_question(question, desired_inputs, error_msg=None):
@@ -45,7 +47,8 @@ def main():
         while GAME != "OVER":
             
             # Asks the user if they want to flip a tile or write a note
-            tile_or_note = ask_question("Flip a tile (F) or write a note (N)? ",
+            tile_or_note = ask_question("Flip a tile (F) or write a Note"+\
+                                        " (N)? ",
                                         ['f','n','F','N'])
 
             # Asks the user which tile they want to play with
@@ -69,14 +72,23 @@ def main():
                 B.score *= int(B.T[which_tile].flip())
                 if B.score == 0:
                     GAME = "OVER"
+                print B     # Show the user their changes
 
             # If we're making a note:
             else:
-                print "Huh. The developer didn't make it this far."
-                #note = ask_question("Wa")
+                newt = ask_question("Which numbers are you jotting down?"+\
+                                    "\n(whenever you finish type: done) ",
+                                    NOTES,
+                                    "Err, please type in 0, 1, 2, 3,"+\
+                                    " or done. ")
+                while newt not in DONE:
+                    B.T[which_tile].note(newt)
+                    print B     # Show the user their changes
+                    newt = ask_question("And? ", NOTES,
+                                        "Err, please type in 0, 1, 2, 3,"+\
+                                        " or done. ")
 
-            # The user's made their change; let's print!
-            print B
+            # The user's made their change; let's loop!
 
         # GAME OVER!
         print "KABOOM! Better luck next time!"
@@ -84,7 +96,7 @@ def main():
 
     # The user chose to be done
     end = '\n'
-    end *= 50
+    end *= 64
     end += "Thanks for playing!"
     print end
     time.sleep(4)
