@@ -3,8 +3,10 @@ from random import randint
 class Tile(object):
     def __init__(self):
         self.up = False
+##        self.ID = ID
         self.contents = ' '
         self._string = '         '
+##        self.string = '    ' + ID + '    '
         # self._string[i] notes
         # 0 = note: 0
         # 1 = decorative if flipped
@@ -67,6 +69,7 @@ class Tile(object):
             pass
         elif self.up:
             self._string = '         '
+##            self.string = '    ' + self.ID + '     '
             self.up = False
         else:
             self._string = '`````````'
@@ -94,6 +97,7 @@ class Data(object):
 class Board(object):
     def __init__(self):
         self.T = [Tile() for n in xrange(25)]
+##        self.T = [Tile(letter) for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXY']
         self.maxscore = self.score = 1
         self.data = Data()
     def __str__(self):
@@ -166,5 +170,11 @@ class Board(object):
             if point != 0:
                 self.maxscore *= point
             tile.contents = str(point)
+        
         self.data.collect_data(self.T)
         print self
+
+##    def flip(self,n):
+##        self.T[n].flip()
+##        self.score *= int(self.T[n].contents)
+##        print self
