@@ -69,7 +69,7 @@ class Tile(object):
             self._string = '         '
             self.up = False
         else:
-            self._string = '*********'
+            self._string = '`````````'
             self._setstring(4,self.contents)
             self.up = True
             return self.contents
