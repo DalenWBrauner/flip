@@ -10,6 +10,12 @@ NOTES =     ['0','1','2','3','D','DONE']
 DONE =      ['D','DONE']
 OPTIONS =   ['F','FLIP','N','NOTE','Q','QUIT']
 BGM =       'http://www.listenonrepeat.com/watch/?v=nPSDHk_lyrc'
+LETTERS =   'ABCDEFGHIJKLMNOPQRSTUVWXY'
+# Given a string letter L, ALPH_NUM[L] outputs L's position in the string.
+ALPH_NUM =  {}
+for position in xrange(25):
+    ALPH_NUM[LETTERS[position]] = position
+
         
 def ask_question(question, desired_inputs, error_msg=None):
     """Returns the user's input after assuring it's valid."""
@@ -24,7 +30,6 @@ def all_up(board):
         t.up = False
         t.flip()
     print board
-
 
 def prep():
     # Asks the user if they want to hear BGM
@@ -47,22 +52,15 @@ def prep():
 
 def pick_a_tile(board):
     """ Asks the user to pick a tile! """
-    print "Okay! Select a tile!"
-    row = ask_question(
-        "Row: ",
-        ROWSCOLS,
-        "Sorry, what was that? We need a number from 1 to 5. ")
-    col = ask_question(
-        "Col: ",
-        ROWSCOLS,
-        "Sorry, what was that? We need a number from 1 to 5. ")
-    which_tile = (int(row) - 1)*5 + int(col)-1
-    
-    if board.T[which_tile].up:
+    theysaid = ask_question("Okay! Select a tile! ",
+                            LETTERS,
+                            "Sorry, what was that? We need a letter from A to Y. ")
+    translation = ALPH_NUM[theysaid]
+    if board.T[translation].up:
         print "Please pick a tile that isn't already flipped!"
         return None
     
-    return which_tile
+    return translation
         
 def notetaking(board):
     pass
@@ -83,14 +81,14 @@ def main():
                 "Flip a tile (F), write a Note (N) or Quit (Q)? ",
                 OPTIONS)
 
-            if tile_or_note in ['q','Q']:
+            if tile_or_note in ['Q','QUIT']:
                 GAME = "QUIT"
             
             # If we're flipping the tile:
-            elif tile_or_note in ['f','F']:
+            elif tile_or_note in ['F','FLIP']:
                 which_tile = pick_a_tile(B)
                 if not (which_tile is None):
-                    B.score *= int(B.T[which_tile].flip())
+                    B.flip(which_tile)
                     if   B.score == 0:
                         GAME = "OVER"
                     elif B.score == B.maxscore:
@@ -98,7 +96,7 @@ def main():
                     print B     # Show the user their changes
 
             # If we're making a note:
-            else:
+            elif tile_or_note in ['N','NOTE']:
                 which_tile = pick_a_tile(B)
                 if not (which_tile is None):
                     newt = ask_question(
@@ -113,10 +111,14 @@ def main():
                             "And? ",
                             NOTES,
                             "Err, please type in 0, 1, 2, 3, or done. ")
+            else:
+                print "Wait, how did you get HERE?"
+                time.sleep(.5)
+                print "Definitely contact the developers."
+                time.sleep(1)
+                print "Tell them",tile_or_note,"sent ya!"
 
             # The user has taken their turn!
-
-
 
 
         # This round has ended:
@@ -130,7 +132,7 @@ def main():
         elif GAME == "QUIT":
             print "Can't fault you for that!"
             all_up(B)
-        playing = ask_question("Ready to play again? (y/n)\n", YESNO)
+        playing = ask_question("Ready to play again? (y/n) ", YESNO)
 
     # The user is done playing:
     end = '\n'

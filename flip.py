@@ -1,12 +1,11 @@
 from random import randint
 
 class Tile(object):
-    def __init__(self):
+    def __init__(self,ID):
         self.up = False
-##        self.ID = ID
+        self.ID = ID
         self.contents = ' '
-        self._string = '         '
-##        self.string = '    ' + ID + '    '
+        self._string = '    ' + ID + '    '
         # self._string[i] notes
         # 0 = note: 0
         # 1 = decorative if flipped
@@ -64,18 +63,17 @@ class Tile(object):
 
     def flip(self,ready=True):
         if not ready:
-            self.__init__()
+            self.__init__(self.ID)
         elif self.up == None:
             pass
         elif self.up:
-            self._string = '         '
-##            self.string = '    ' + self.ID + '     '
+            self._string = '    ' + self.ID + '     '
             self.up = False
         else:
             self._string = '`````````'
             self._setstring(4,self.contents)
             self.up = True
-            return self.contents
+
         
 class Data(object):
     """Collects the values in each row and col, along with
@@ -96,8 +94,7 @@ class Data(object):
             
 class Board(object):
     def __init__(self):
-        self.T = [Tile() for n in xrange(25)]
-##        self.T = [Tile(letter) for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXY']
+        self.T = [Tile(letter) for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXY']
         self.maxscore = self.score = 1
         self.data = Data()
     def __str__(self):
@@ -174,7 +171,7 @@ class Board(object):
         self.data.collect_data(self.T)
         print self
 
-##    def flip(self,n):
-##        self.T[n].flip()
-##        self.score *= int(self.T[n].contents)
-##        print self
+    def flip(self,n):
+        self.T[n].flip()
+        self.score *= int(self.T[n].contents)
+        print self
